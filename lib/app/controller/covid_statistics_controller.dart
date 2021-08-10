@@ -11,11 +11,19 @@ class CovidStatisticsController extends GetxController {
   void onInit() {
     super.onInit();
     _covidClient = CovidRepository();
-    fetchCovidState();
+    // fetchCovidState();
+    fetchCovidStateDummy();
   }
 
   void fetchCovidState() async {
     var result = await _covidClient.fetchCovidStatistics();
+    if (result != null) {
+      covidStatistics(result);
+    }
+  }
+
+  void fetchCovidStateDummy() async {
+    var result = await _covidClient.fetchDummy();
     if (result != null) {
       covidStatistics(result);
     }

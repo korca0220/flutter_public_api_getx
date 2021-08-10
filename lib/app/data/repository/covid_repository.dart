@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_public_api_getx/app/data/model/covid_statistics.dart';
+import 'package:flutter_public_api_getx/app/data/model/dummy_data.dart';
 import 'package:xml/xml.dart';
 
 class CovidRepository {
@@ -21,6 +22,16 @@ class CovidRepository {
     var response =
         await _dio.get('/openapi/service/rest/Covid19/getCovid19InfStateJson');
     final document = XmlDocument.parse(response.data);
+    final result = document.findAllElements('item');
+    if (result.isNotEmpty) {
+      return CovidStatisticsModel.fromXml(result.first);
+    } else {
+      return Future.value(null);
+    }
+  }
+
+  Future<CovidStatisticsModel> fetchDummy() async {
+    final document = XmlDocument.parse(DummyData.dummyXml);
     final result = document.findAllElements('item');
     if (result.isNotEmpty) {
       return CovidStatisticsModel.fromXml(result.first);
