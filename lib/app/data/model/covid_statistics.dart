@@ -45,22 +45,22 @@ class CovidStatisticsModel {
 
   factory CovidStatisticsModel.fromXml(XmlElement xml) {
     return CovidStatisticsModel(
-      accDefRate: XmlUtils.serchResultForDouble(xml, 'accDefRate'),
-      accExamCnt: XmlUtils.serchResultForDouble(xml, 'accExamCnt'),
-      accExamCompCnt: XmlUtils.serchResultForDouble(xml, 'accExamCompCnt'),
-      careCnt: XmlUtils.serchResultForDouble(xml, 'careCnt'),
-      clearCnt: XmlUtils.serchResultForDouble(xml, 'clearCnt'),
-      deathCnt: XmlUtils.serchResultForDouble(xml, 'deathCnt'),
-      decideCnt: XmlUtils.serchResultForDouble(xml, 'decideCnt'),
-      examCnt: XmlUtils.serchResultForDouble(xml, 'examCnt'),
-      resutlNegCnt: XmlUtils.serchResultForDouble(xml, 'resutlNegCnt'),
-      seq: XmlUtils.serchResultForDouble(xml, 'seq'),
-      createDt: XmlUtils.serchResultForString(xml, 'createDt'),
-      stateDt: XmlUtils.serchResultForString(xml, 'stateDt') != ''
-          ? DateTime.parse(XmlUtils.serchResultForString(xml, 'stateDt'))
+      accDefRate: XmlUtils.serchResult<double>(xml, 'accDefRate'),
+      accExamCnt: XmlUtils.serchResult<double>(xml, 'accExamCnt'),
+      accExamCompCnt: XmlUtils.serchResult<double>(xml, 'accExamCompCnt'),
+      careCnt: XmlUtils.serchResult<double>(xml, 'careCnt'),
+      clearCnt: XmlUtils.serchResult<double>(xml, 'clearCnt'),
+      deathCnt: XmlUtils.serchResult<double>(xml, 'deathCnt'),
+      decideCnt: XmlUtils.serchResult<double>(xml, 'decideCnt'),
+      examCnt: XmlUtils.serchResult<double>(xml, 'examCnt'),
+      resutlNegCnt: XmlUtils.serchResult<double>(xml, 'resutlNegCnt'),
+      seq: XmlUtils.serchResult<double>(xml, 'seq'),
+      createDt: XmlUtils.serchResult<String>(xml, 'createDt'),
+      stateDt: XmlUtils.serchResult<String>(xml, 'stateDt') != ''
+          ? DateTime.parse(XmlUtils.serchResult<String>(xml, 'stateDt'))
           : null,
-      stateTime: XmlUtils.serchResultForString(xml, 'stateTime'),
-      updateDt: XmlUtils.serchResultForString(xml, 'updateDt'),
+      stateTime: XmlUtils.serchResult<String>(xml, 'stateTime'),
+      updateDt: XmlUtils.serchResult<String>(xml, 'updateDt'),
     );
   }
 
