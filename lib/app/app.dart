@@ -1,6 +1,5 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_public_api_getx/app/canvas/arrow_clip_path.dart';
+import 'package:flutter_public_api_getx/app/components/bar_chart.dart';
 import 'package:flutter_public_api_getx/app/components/covid_statistics_viwer.dart';
 import 'package:flutter_public_api_getx/app/controller/covid_statistics_controller.dart';
 import 'package:get/get.dart';
@@ -42,9 +41,11 @@ class App extends GetView<CovidStatisticsController> {
               borderRadius: BorderRadius.circular(20),
               color: Color(0xff195f68),
             ),
-            child: Text(
-              '07.24 00:00 기준',
-              style: TextStyle(color: Colors.white),
+            child: Obx(
+              () => Text(
+                controller.todayData.standardDayString,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -52,57 +53,73 @@ class App extends GetView<CovidStatisticsController> {
       Positioned(
         top: headerTopZone * Get.size.height * 0.0022,
         right: Get.size.width * 0.15,
-        child: CovidStatisticsViwer(
-          title: '확진자',
-          addedCount: 1629,
-          totalCount: 187362,
-          upDown: ArrowDirection.UP,
-          titleColor: Colors.white,
-          subValueColor: Colors.white,
+        child: Obx(
+          () => controller.isLoading.value
+              ? Center(child: CircularProgressIndicator())
+              : CovidStatisticsViwer(
+                  title: '확진자',
+                  addedCount: controller.todayData.calcDecideCnt.abs(),
+                  totalCount: controller.todayData.decideCnt ?? 0,
+                  upDown: controller
+                      .calculateUpDown(controller.todayData.calcDecideCnt),
+                  titleColor: Colors.white,
+                  subValueColor: Colors.white,
+                ),
         ),
       ),
     ];
   }
 
   Widget _todayStatistics() {
-    return Row(
-      children: [
-        Expanded(
-          child: CovidStatisticsViwer(
-            title: '격리해제',
-            addedCount: 1040,
-            totalCount: 165246,
-            upDown: ArrowDirection.UP,
-            dense: true,
+    return Obx(
+      () => Row(
+        children: [
+          Expanded(
+            child: controller.isLoading.value
+                ? Center(child: CircularProgressIndicator())
+                : CovidStatisticsViwer(
+                    title: '격리해제',
+                    addedCount: controller.todayData.calcClearCnt.abs(),
+                    totalCount: controller.todayData.clearCnt ?? 0,
+                    upDown: controller
+                        .calculateUpDown(controller.todayData.calcClearCnt),
+                    dense: true,
+                  ),
           ),
-        ),
-        Container(
-          height: 60,
-          child: VerticalDivider(color: Color(0xffc7c7c7)),
-        ),
-        Expanded(
-          child: CovidStatisticsViwer(
-            title: '검사 중',
-            addedCount: 3314,
-            totalCount: 274697,
-            upDown: ArrowDirection.DOWN,
-            dense: true,
+          Container(
+            height: 60,
+            child: VerticalDivider(color: Color(0xffc7c7c7)),
           ),
-        ),
-        Container(
-          height: 60,
-          child: VerticalDivider(color: Color(0xffc7c7c7)),
-        ),
-        Expanded(
-          child: CovidStatisticsViwer(
-            title: '사망자',
-            addedCount: 2,
-            totalCount: 2068,
-            upDown: ArrowDirection.UP,
-            dense: true,
+          Expanded(
+            child: controller.isLoading.value
+                ? Center(child: CircularProgressIndicator())
+                : CovidStatisticsViwer(
+                    title: '검사 중',
+                    addedCount: controller.todayData.calcExamCnt.abs(),
+                    totalCount: controller.todayData.examCnt ?? 0,
+                    upDown: controller
+                        .calculateUpDown(controller.todayData.calcExamCnt),
+                    dense: true,
+                  ),
           ),
-        ),
-      ],
+          Container(
+            height: 60,
+            child: VerticalDivider(color: Color(0xffc7c7c7)),
+          ),
+          Expanded(
+            child: controller.isLoading.value
+                ? Center(child: CircularProgressIndicator())
+                : CovidStatisticsViwer(
+                    title: '사망자',
+                    addedCount: controller.todayData.calcDeathCnt.abs(),
+                    totalCount: controller.todayData.deathCnt ?? 0,
+                    upDown: controller
+                        .calculateUpDown(controller.todayData.calcDeathCnt),
+                    dense: true,
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -116,130 +133,13 @@ class App extends GetView<CovidStatisticsController> {
         ),
         AspectRatio(
           aspectRatio: 1.7,
-          child: Card(
-            elevation: 0,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            // color: const Color(0xff2c4260),
-            child: BarChart(
-              BarChartData(
-                alignment: BarChartAlignment.spaceAround,
-                maxY: 20,
-                barTouchData: BarTouchData(
-                  enabled: false,
-                  touchTooltipData: BarTouchTooltipData(
-                    tooltipBgColor: Colors.transparent,
-                    tooltipPadding: const EdgeInsets.all(0),
-                    tooltipMargin: 8,
-                    getTooltipItem: (
-                      BarChartGroupData group,
-                      int groupIndex,
-                      BarChartRodData rod,
-                      int rodIndex,
-                    ) {
-                      return BarTooltipItem(
-                        rod.y.round().toString(),
-                        TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
+          child: Obx(
+            () => controller.weekDays.length == 0
+                ? Container()
+                : CovidBarChart(
+                    covidDatas: controller.weekDays,
+                    maxY: controller.maxDecideValue,
                   ),
-                ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  bottomTitles: SideTitles(
-                    showTitles: true,
-                    getTextStyles: (value) => const TextStyle(
-                        color: Color(0xff7589a2),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14),
-                    margin: 20,
-                    getTitles: (double value) {
-                      switch (value.toInt()) {
-                        case 0:
-                          return 'Mn';
-                        case 1:
-                          return 'Te';
-                        case 2:
-                          return 'Wd';
-                        case 3:
-                          return 'Tu';
-                        case 4:
-                          return 'Fr';
-                        case 5:
-                          return 'St';
-                        case 6:
-                          return 'Sn';
-                        default:
-                          return '';
-                      }
-                    },
-                  ),
-                  leftTitles: SideTitles(showTitles: false),
-                ),
-                borderData: FlBorderData(
-                  show: false,
-                ),
-                barGroups: [
-                  BarChartGroupData(
-                    x: 0,
-                    barRods: [
-                      BarChartRodData(
-                          y: 8,
-                          colors: [Colors.lightBlueAccent, Colors.greenAccent])
-                    ],
-                    showingTooltipIndicators: [0],
-                  ),
-                  BarChartGroupData(
-                    x: 1,
-                    barRods: [
-                      BarChartRodData(
-                          y: 10,
-                          colors: [Colors.lightBlueAccent, Colors.greenAccent])
-                    ],
-                    showingTooltipIndicators: [0],
-                  ),
-                  BarChartGroupData(
-                    x: 2,
-                    barRods: [
-                      BarChartRodData(
-                          y: 14,
-                          colors: [Colors.lightBlueAccent, Colors.greenAccent])
-                    ],
-                    showingTooltipIndicators: [0],
-                  ),
-                  BarChartGroupData(
-                    x: 3,
-                    barRods: [
-                      BarChartRodData(
-                          y: 15,
-                          colors: [Colors.lightBlueAccent, Colors.greenAccent])
-                    ],
-                    showingTooltipIndicators: [0],
-                  ),
-                  BarChartGroupData(
-                    x: 3,
-                    barRods: [
-                      BarChartRodData(
-                          y: 13,
-                          colors: [Colors.lightBlueAccent, Colors.greenAccent])
-                    ],
-                    showingTooltipIndicators: [0],
-                  ),
-                  BarChartGroupData(
-                    x: 3,
-                    barRods: [
-                      BarChartRodData(
-                          y: 10,
-                          colors: [Colors.lightBlueAccent, Colors.greenAccent])
-                    ],
-                    showingTooltipIndicators: [0],
-                  ),
-                ],
-              ),
-            ),
           ),
         )
       ],
@@ -274,7 +174,7 @@ class App extends GetView<CovidStatisticsController> {
         children: [
           ..._background(),
           Positioned(
-            top: headerTopZone + Get.size.height * 0.27,
+            top: headerTopZone + Get.size.height * 0.3,
             left: 0,
             right: 0,
             bottom: 0,
@@ -293,7 +193,7 @@ class App extends GetView<CovidStatisticsController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _todayStatistics(),
-                      SizedBox(height: 20),
+                      SizedBox(height: 30),
                       _covidTrendChart()
                     ],
                   ),
