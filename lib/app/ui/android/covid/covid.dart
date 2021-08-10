@@ -5,8 +5,8 @@ import 'package:flutter_public_api_getx/app/controller/covid/covid_statistics_co
 import 'package:flutter_public_api_getx/app/ui/theme/app_colors.dart';
 import 'package:get/get.dart';
 
-class App extends GetView<CovidStatisticsController> {
-  App({Key? key}) : super(key: key);
+class CovidPage extends GetView<CovidStatisticsController> {
+  CovidPage({Key? key}) : super(key: key);
   double headerTopZone = 0;
 
   List<Widget> _background() {
