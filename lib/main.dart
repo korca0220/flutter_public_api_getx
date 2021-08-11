@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_public_api_getx/app/app.dart';
 import 'package:flutter_public_api_getx/app/controller/covid/covid_statistics_controller.dart';
 import 'package:flutter_public_api_getx/app/controller/root_controller.dart';
 import 'package:flutter_public_api_getx/app/routes/app_pages.dart';
-import 'package:flutter_public_api_getx/app/ui/root.dart';
 import 'package:flutter_public_api_getx/app/ui/theme/app_colors.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
@@ -20,7 +18,6 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       initialBinding: BindingsBuilder(() {
         Get.put(RootController());
-        Get.put(CovidStatisticsController());
       }),
       theme: ThemeData(primaryColor: primaryColor),
       initialRoute: '/',

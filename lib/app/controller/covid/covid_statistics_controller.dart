@@ -16,9 +16,12 @@ class CovidStatisticsController extends GetxController {
   void onInit() {
     super.onInit();
     _covidClient = CovidRepository();
-    fetchCovidState();
-    // fetchCovidStateDummy();
+    // fetchCovidState();
+    fetchCovidStateDummy();
   }
+
+  CovidStatisticsModel get todayData => _todayData.value;
+  List<CovidStatisticsModel> get weekDays => _weekDatas;
 
   void fetchCovidState() async {
     isLoading.value = true;
@@ -61,8 +64,6 @@ class CovidStatisticsController extends GetxController {
     }
   }
 
-  CovidStatisticsModel get todayData => _todayData.value;
-  List<CovidStatisticsModel> get weekDays => _weekDatas;
   ArrowDirection calculateUpDown(double calcDecideCnt) {
     if (calcDecideCnt == 0) {
       return ArrowDirection.MIDDLE;
