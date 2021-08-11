@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_public_api_getx/app/controller/covid/covid_statistics_controller.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_public_api_getx/app/controller/root_controller.dart';
 import 'package:flutter_public_api_getx/app/routes/app_pages.dart';
 import 'package:flutter_public_api_getx/app/ui/theme/app_colors.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: '.env');
   runApp(MyApp());
 }
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter PublicApi App',
       initialBinding: BindingsBuilder(() {
         Get.put(RootController());
       }),

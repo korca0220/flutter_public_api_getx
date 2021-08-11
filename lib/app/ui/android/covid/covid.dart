@@ -3,6 +3,7 @@ import 'package:flutter_public_api_getx/app/ui/android/covid/components/backgrou
 import 'package:flutter_public_api_getx/app/controller/covid/covid_statistics_controller.dart';
 import 'package:flutter_public_api_getx/app/ui/android/covid/components/statistics.dart';
 import 'package:flutter_public_api_getx/app/ui/theme/app_colors.dart';
+import 'package:flutter_public_api_getx/app/ui/theme/app_text_theme.dart';
 import 'package:get/get.dart';
 
 class CovidPage extends GetView<CovidStatisticsController> {
@@ -17,7 +18,7 @@ class CovidPage extends GetView<CovidStatisticsController> {
         leading: Icon(Icons.menu, color: primaryColor),
         title: Text(
           "코로나 일별 현황",
-          style: TextStyle(color: primaryColor),
+          style: appBarTextStyle,
         ),
         centerTitle: true,
         elevation: 0.0,

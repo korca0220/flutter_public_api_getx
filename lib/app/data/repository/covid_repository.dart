@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_public_api_getx/app/data/model/covid_statistics.dart';
 import 'package:flutter_public_api_getx/app/data/model/dummy_data.dart';
 import 'package:xml/xml.dart';
@@ -10,10 +11,7 @@ class CovidRepository {
     _dio = Dio(
       BaseOptions(
         baseUrl: "http://openapi.data.go.kr",
-        queryParameters: {
-          "serviceKey":
-              "Yvv6NtTx2QOyMg5bJhHwsGunFsyLBvABAZMtbb/XHOT6iGQekhuhjpmr4bvUtkWgarj+CSQMj21si523SFftpg=="
-        },
+        queryParameters: {"serviceKey": dotenv.env['PUBLIC_DATA_API_KEY']},
       ),
     );
   }
