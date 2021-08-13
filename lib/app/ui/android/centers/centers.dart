@@ -4,6 +4,8 @@ import 'package:flutter_public_api_getx/app/ui/theme/app_colors.dart';
 import 'package:flutter_public_api_getx/app/ui/theme/app_text_theme.dart';
 import 'package:get/get.dart';
 
+import 'components/center_tile.dart';
+
 class CentersPage extends StatelessWidget {
   CentersPage({Key? key}) : super(key: key);
   final CentersController controller = Get.put(CentersController());
@@ -14,7 +16,7 @@ class CentersPage extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            color: gradientStartColor.withOpacity(0.7),
+            color: gradientStartColor.withOpacity(0.5),
           ),
           CustomScrollView(
             controller: controller.scrollController,
@@ -26,17 +28,19 @@ class CentersPage extends StatelessWidget {
                 ),
                 backgroundColor: gradientStartColor,
                 centerTitle: true,
+                floating: true,
+                snap: true,
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return GestureDetector(
-                      child: ListTile(
-                        title: Text('tttt'),
-                      ),
-                    );
-                  },
-                  childCount: 30,
+              Obx(
+                () => SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return CenterTile(index: index);
+                    },
+                    childCount: controller.centerData.data.isEmpty
+                        ? 0
+                        : controller.centerData.data.length,
+                  ),
                 ),
               ),
             ],

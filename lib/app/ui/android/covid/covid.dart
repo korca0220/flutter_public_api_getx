@@ -6,7 +6,7 @@ import 'package:flutter_public_api_getx/app/ui/theme/app_colors.dart';
 import 'package:flutter_public_api_getx/app/ui/theme/app_text_theme.dart';
 import 'package:get/get.dart';
 
-class CovidPage extends GetView<CovidStatisticsController> {
+class CovidPage extends StatelessWidget {
   CovidPage({Key? key}) : super(key: key);
   final CovidStatisticsController controller =
       Get.put(CovidStatisticsController());
